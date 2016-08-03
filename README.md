@@ -1,1 +1,12 @@
-# Davisbase---SQL-DATABASE-ENGINE
+# Davisbase-SQL DATABASE ENGINE
+
+###A java-based SQL databse engine which support common SQL syntax:
+- CREATE DATABASE
+- CREATE TABLE
+- INSERT INTO
+- UPDATE
+- DROP TABLE
+- SELECT-FROM-WHERE (WHERE CLAUSE CAN BE APPLIED TO EITHER PRIMARY KEY OR NON-KEY ATTRIBUTES)
+
+##File Format:
+- databaseHeader:
