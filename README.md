@@ -3,7 +3,7 @@
 ###A java-based SQL databse engine which support common SQL syntax:
 - CREATE DATABASE
 
-> #### CRREATE DATABASE database_name;
+> #### CREATE DATABASE database_name;
 
 - CREATE TABLE
 
