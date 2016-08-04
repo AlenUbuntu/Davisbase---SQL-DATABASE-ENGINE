@@ -1,15 +1,15 @@
 # Davisbase-SQL DATABASE ENGINE
 
 ###A java-based SQL databse engine which support common SQL syntax:
-- CREATE DATABASE
+>### CREATE DATABASE
 
 > #### CREATE DATABASE database_name;
 
-- CREATE TABLE
+>### CREATE TABLE
 
 > #### CREATE TABLE table_name (attrName dataType Constraints_List); (Multiline input supported)
 
-- INSERT INTO
+>### INSERT INTO
 
 > #### INSERT INTO table_name (Attr_List) VALUES (Value_List);
 
@@ -17,15 +17,15 @@
 
 > #### INSERT INTO table_name VALUES (Value_List);
 
-- UPDATE (WHERE CLAUSE CAN BE APPLIED TO EITHER KEY OR NON-KEY ATTRIBUTES)
+>### UPDATE (WHERE CLAUSE CAN BE APPLIED TO EITHER KEY OR NON-KEY ATTRIBUTES)
 
 > #### UPDATE table_name SET attr1=val1,attr2=val2,... (WHERE condition);
 
-- DROP TABLE
+>### DROP TABLE
 
 > #### DROP TABLE table_name;
 
-- SELECT-FROM-WHERE (WHERE CLAUSE CAN BE APPLIED TO EITHER KEY OR NON-KEY ATTRIBUTES)
+>### SELECT-FROM-WHERE (WHERE CLAUSE CAN BE APPLIED TO EITHER KEY OR NON-KEY ATTRIBUTES)
 
 > #### SELECT * FROM table_name (WHERE condition);
 
@@ -33,7 +33,7 @@
 
 > #### SELECT attr_List FROM table_name (WHERE condition);
 
-- USE
+>### USE
 
 > #### USE database_name;
 
