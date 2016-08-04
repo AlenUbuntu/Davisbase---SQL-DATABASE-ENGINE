@@ -2,11 +2,40 @@
 
 ###A java-based SQL databse engine which support common SQL syntax:
 - CREATE DATABASE
+
+> #### CRREATE DATABASE database_name;
+
 - CREATE TABLE
+
+> #### CREATE TABLE table_name (attrName dataType Constraints_List); (Multiline input supported)
+
 - INSERT INTO
-- UPDATE
+
+> #### INSERT INTO table_name (Attr_List) VALUES (Value_List);
+
+> or
+
+> #### INSERT INTO table_name VALUES (Value_List);
+
+- UPDATE (WHERE CLAUSE CAN BE APPLIED TO EITHER KEY OR NON-KEY ATTRIBUTES)
+
+> #### UPDATE table_name SET attr1=val1,attr2=val2,... (WHERE condition);
+
 - DROP TABLE
-- SELECT-FROM-WHERE (WHERE CLAUSE CAN BE APPLIED TO EITHER PRIMARY KEY OR NON-KEY ATTRIBUTES)
+
+> #### DROP TABLE table_name;
+
+- SELECT-FROM-WHERE (WHERE CLAUSE CAN BE APPLIED TO EITHER KEY OR NON-KEY ATTRIBUTES)
+
+> #### SELECT * FROM table_name (WHERE condition);
+
+> or
+
+> #### SELECT attr_List FROM table_name (WHERE condition);
+
+- USE
+
+> #### USE database_name;
 
 ##File Format:
 - databaseHeader:
@@ -18,7 +47,7 @@
 ##### 0x0002-0x0013: magic header
 
 
-##### 00014-0x0015: page size
+##### 0x0014-0x0015: page size
 
 
 ##### 0x0016: most recent version of DBMS that modifies the file
