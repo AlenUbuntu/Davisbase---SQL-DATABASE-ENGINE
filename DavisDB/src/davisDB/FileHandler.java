@@ -787,7 +787,7 @@ public class FileHandler {
 		     boolean where,HashMap<Integer,Integer> typeCodeList, String database) throws Exception{
 		
 		if(this.databasePages == 1)
-			throw new Exception(String.format("Error 14: table {} contains no data!",tableName));
+			throw new Exception(String.format("Error 14: table %s contains no data!",tableName));
 		if(this.root == null)
 			this.root = getRoot();
 		// find the start page
@@ -910,7 +910,7 @@ public class FileHandler {
 		     boolean where, ArrayList<HashMap<String,Any>> rows, ArrayList<HashMap<String,Integer>> typeCodes) throws Exception{
 		
 		if(this.databasePages == 1)
-			throw new Exception(String.format("Error 14: table {} contains no data!",tableName));
+			throw new Exception(String.format("Error 14: table %s contains no data!",tableName));
 		if(this.root == null)
 			this.root = getRoot();
 		// find the start page

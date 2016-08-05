@@ -213,10 +213,11 @@ public class Utilities {
 	
 	public static int[] removeDupKeys(int[] keys){
 		Integer[] tmp = toIntegerArray(keys);
+
 		List<Integer> list = Arrays.asList(tmp);
 		HashSet<Integer> set = new HashSet<>(list);
 		tmp = set.toArray(new Integer[]{});
-		return toIntArray(tmp);
+		return Utilities.toIntArray(tmp);
 	}
 	
 	// convert a ZonedDateTime to its corresponding epochMillSeconds
@@ -921,15 +922,16 @@ public class Utilities {
 				
 				// check if missing NOT_NULL value
 				if(cons.get("IS_NULLABLE").toLowerCase().trim().equals("no")){
-					if(!valueList.containsKey(colNames[i]))
-						throw new Exception(String.format("Error 10: Missing required data for {} (NOT NULL)",colNames[i]));
+
+					if(!valueList.containsKey(colNames[i]) || new String(valueList.get(colNames[i])).toLowerCase().trim().equals("null"))
+						throw new Exception(String.format("Error 10: Missing required data for %s (NOT NULL)",colNames[i]));
 				}
 				
 
 				// check if missing Primary key value
 				if(cons.get("COLUMN_KEY").toLowerCase().trim().equals("pri")){
 					if(!valueList.containsKey(colNames[i]))
-						throw new Exception(String.format("Error 11: Missing required data for {} (PRIMARY KEY)",colNames[i]));
+						throw new Exception(String.format("Error 11: Missing required data for %s (PRIMARY KEY)",colNames[i]));
 				}
 				
 				// check value type
@@ -964,6 +966,8 @@ public class Utilities {
 				if(value!=null){
 					if (value.contains("\""))
 						value = value.substring(value.indexOf('"')+1,value.lastIndexOf('"'));
+					if (value.contains("\'"))
+						value = value.substring(value.indexOf('\'')+1,value.lastIndexOf('\''));
 					if(value.toLowerCase().trim().equals("null")){
 						typeCodes.add(0x00);
 						any.insert_octet((byte) 0);
@@ -986,6 +990,8 @@ public class Utilities {
 				if(value != null){
 					if (value.contains("\""))
 						value = value.substring(value.indexOf('"')+1,value.lastIndexOf('"'));
+					if (value.contains("\'"))
+						value = value.substring(value.indexOf('\'')+1,value.lastIndexOf('\''));
 					if(value.toLowerCase().trim().equals("null")){
 						typeCodes.add(0x01);
 						any.insert_short((short) 0);
@@ -1008,6 +1014,8 @@ public class Utilities {
 				if(value!=null){
 					if (value.contains("\""))
 						value = value.substring(value.indexOf('"')+1,value.lastIndexOf('"'));
+					if (value.contains("\'"))
+						value = value.substring(value.indexOf('\'')+1,value.lastIndexOf('\''));
 					if(value.toLowerCase().trim().equals("null")){
 						typeCodes.add(0x02);
 						any.insert_long(0);
@@ -1030,6 +1038,8 @@ public class Utilities {
 				if(value!=null){
 					if (value.contains("\""))
 						value = value.substring(value.indexOf('"')+1,value.lastIndexOf('"'));
+					if (value.contains("\'"))
+						value = value.substring(value.indexOf('\'')+1,value.lastIndexOf('\''));
 					if(value.toLowerCase().trim().equals("null")){
 						typeCodes.add(0x03);
 						any.insert_longlong(0);
@@ -1053,6 +1063,8 @@ public class Utilities {
 				if(value!=null){
 					if (value.contains("\""))
 						value = value.substring(value.indexOf('"')+1,value.lastIndexOf('"'));
+					if (value.contains("\'"))
+						value = value.substring(value.indexOf('\'')+1,value.lastIndexOf('\''));
 					if(value.toLowerCase().trim().equals("null")){
 						typeCodes.add(0x02);
 						any.insert_long(0);
@@ -1075,6 +1087,8 @@ public class Utilities {
 				if(value!=null){
 					if (value.contains("\""))
 						value = value.substring(value.indexOf('"')+1,value.lastIndexOf('"'));
+					if (value.contains("\'"))
+						value = value.substring(value.indexOf('\'')+1,value.lastIndexOf('\''));
 					if(value.toLowerCase().trim().equals("null")){
 						typeCodes.add(0x03);
 						any.insert_longlong(0);
@@ -1097,6 +1111,8 @@ public class Utilities {
 				if(value!=null){
 					if (value.contains("\""))
 						value = value.substring(value.indexOf('"')+1,value.lastIndexOf('"'));
+					if (value.contains("\'"))
+						value = value.substring(value.indexOf('\'')+1,value.lastIndexOf('\''));
 					if(value.toLowerCase().trim().equals("null")){
 						typeCodes.add(0x03);
 						any.insert_longlong(0);
@@ -1119,6 +1135,8 @@ public class Utilities {
 				if(value!=null){
 					if (value.contains("\""))
 						value = value.substring(value.indexOf('"')+1,value.lastIndexOf('"'));
+					if (value.contains("\'"))
+						value = value.substring(value.indexOf('\'')+1,value.lastIndexOf('\''));
 					if(value.toLowerCase().trim().equals("null")){
 						typeCodes.add(0x03);
 						any.insert_longlong(0);
@@ -1138,13 +1156,15 @@ public class Utilities {
 				break;
 			case "text":
 				any = orb.create_any();
-				if(value!=null && !value.contains("\"")){
+				if(value!=null && (!value.contains("\"") && !value.contains("\'"))){
 					if(!(value.toLowerCase().trim().equals("null")))
-						throw new Exception(String.format("Syntax Error: Missing \" for {}",value));
+						throw new Exception(String.format("Syntax Error: Missing \" for %s",value));
 				}
 				if(value!=null){
 					if (value.contains("\""))
 						value = value.substring(value.indexOf('"')+1,value.lastIndexOf('"'));
+					if (value.contains("\'"))
+						value = value.substring(value.indexOf('\'')+1,value.lastIndexOf('\''));
 					if(value.toLowerCase().trim().equals("null")){
 						typeCodes.add(0x0C+"null    ".length());  // reserve 8 bytes for future operation
 						any.insert_string("null    ");
@@ -1195,6 +1215,8 @@ public class Utilities {
 			return;
 		if(value.contains("\""))
 			value = value.substring(value.indexOf('"')+1, value.lastIndexOf('"'));
+		if (value.contains("\'"))
+			value = value.substring(value.indexOf('\'')+1,value.lastIndexOf('\''));
 		int charMaxLength = 0;
 		if(column_type.contains("text")){
 			charMaxLength = Integer.parseInt(char_max_length);

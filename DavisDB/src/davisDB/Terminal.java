@@ -38,8 +38,7 @@ public class Terminal {
 							executeCmd(userCmdInput);
 						}
 						catch(Exception e){
-							System.out.println(e.toString());
-							e.printStackTrace();
+							System.out.println(e.toString().substring(e.toString().indexOf(':')+1));
 						}
 						userCmdInput = "";
 						System.out.print(prompt);

@@ -404,6 +404,28 @@ public class CommandExecutor {
 		ArrayList<Integer> typeCodes = new ArrayList<>();
 		HashMap<Integer,Any> comValList = new HashMap<>();
 		Utilities.checkConstraints(colNames,constraints,valueList,typeCodes,comValList,true);
+		// check the column that is primary key
+		Any whereValue = null;
+		int operaIndex = -1;
+		boolean priInt=false;
+		for(int i=0;i<colNames.length;i++){
+			HashMap<String,String> cons = constraints.get(colNames[i]);
+			if(cons.get("COLUMN_KEY").toLowerCase().trim().equals("pri")){
+				byte[] tmp = valueList.get(colNames[i]);
+				String dataType = cons.get("DATA_TYPE");
+				if(dataType.contains("int") && !dataType.contains("big"))
+					priInt=true;
+				whereValue = Utilities.getData(dataType,new String(tmp));
+				operaIndex = i;
+				break;
+			}
+		}
+		ArrayList<HashMap<String,Any>> whereRows = new ArrayList<>();
+		ArrayList<HashMap<String,Integer>> whereTypeCodes = new ArrayList<>();
+		handler.selectRecs(false, tableName, handler,"=", whereValue, operaIndex, priInt, true, colNames, true, whereRows, whereTypeCodes);
+		if(!whereRows.isEmpty())
+			throw new Exception("Error: duplicate keys are found!");
+		
 		int[] typeCodes_1 = Utilities.toIntArray(typeCodes.toArray(new Integer[]{}));
 		handler.writeTableRow(typeCodes_1,comValList,false,tableName);
 		handler.close();
@@ -455,12 +477,50 @@ public class CommandExecutor {
 				String tmp = new String(valRoot.getVal());
 				if(tmp.contains("\""))
 					tmp = tmp.substring(tmp.indexOf('"')+1,tmp.lastIndexOf('"'));
+				if(tmp.contains("\'"))
+					tmp = tmp.substring(tmp.indexOf('\'')+1,tmp.lastIndexOf('\''));
 				HashMap<String,String> map1 = constraints.get(colName);
 				String dataType = map1.get("DATA_TYPE");
 
 				Any val = Utilities.getData(dataType, tmp,colIndex,typeCodeList);
 				valueList.put(colIndex, val);	
 			valRoot = valRoot.getSibl();
+		}
+		
+		// check the update column
+		int whereOperIndex = -1;
+		boolean wherePriInt=false;
+		Any whereValue2 = null;
+		for(int i=0;i<colNames.length;i++){
+			HashMap<String,String> cons = constraints.get(colNames[i]);
+			if(cons.get("COLUMN_KEY").toLowerCase().trim().equals("pri")){
+				if(valueList.containsKey(i)){
+					whereOperIndex=i;
+					whereValue2 = valueList.get(i);
+					String dataType = cons.get("DATA_TYPE");
+					if(dataType.contains("int") && !dataType.contains("big"))
+						wherePriInt=true;
+					int typeCode = typeCodeList.get(i);
+					if ((typeCode<0x0C && Utilities.In(typeCode, new int[]{0x00,0x01,0x02,0x03})) || (typeCode>=0x0C && valueList.get(i).extract_string().toLowerCase().trim().equals("null")))
+						throw new Exception(String.format("Error: %s cannot accept null value",colNames[i]));
+				}
+			}
+			if(cons.get("IS_NULLABLE").toLowerCase().trim().equals("no")){
+				if(valueList.containsKey(i))
+				{
+					int typeCode = typeCodeList.get(i);
+					if ((typeCode<0x0C && Utilities.In(typeCode, new int[]{0x00,0x01,0x02,0x03})) || (typeCode>=0x0C && valueList.get(i).extract_string().toLowerCase().trim().equals("null")))
+						throw new Exception(String.format("Error: %s cannot accept null value",colNames[i]));
+				}
+			}
+		}
+		
+		ArrayList<HashMap<String,Any>> whereRows = new ArrayList<>();
+		ArrayList<HashMap<String,Integer>> whereTypeCodes = new ArrayList<>();
+		if(whereValue2!=null){
+			handler.selectRecs(false, tableName, handler,"=", whereValue2, whereOperIndex, wherePriInt, true, colNames, true, whereRows, whereTypeCodes);
+			if(!whereRows.isEmpty())
+				throw new Exception("Error: duplicate keys are found!");
 		}
 		
 		// read where condition
@@ -475,6 +535,8 @@ public class CommandExecutor {
 			whereValue = new String(whereRoot.getVal());
 			if(whereValue.contains("\""))
 				whereValue = whereValue.substring(whereValue.indexOf('"')+1,whereValue.lastIndexOf('"'));
+			if(whereValue.contains("\'"))
+				whereValue = whereValue.substring(whereValue.indexOf('\'')+1,whereValue.lastIndexOf('\''));
 			whereValList = new HashMap<>();
 			whereValList.put(whereColName, whereRoot.getVal());
 
@@ -582,6 +644,8 @@ public class CommandExecutor {
 				whereValue = new String(whereRoot.getVal());
 				if(whereValue.contains("\""))
 					whereValue = whereValue.substring(whereValue.indexOf('"')+1,whereValue.lastIndexOf('"'));
+				if(whereValue.contains("\'"))
+					whereValue = whereValue.substring(whereValue.indexOf('\'')+1,whereValue.lastIndexOf('\''));
 				whereValList = new HashMap<>();
 				whereValList.put(whereColName, whereRoot.getVal());
 		
