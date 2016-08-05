@@ -8,7 +8,7 @@
 
 #### CREATE TABLE
 
-> #### CREATE TABLE table_name (attrName dataType Constraints_List); (Multiline input supported)
+> #### CREATE TABLE table_name (attrName dataType Constraints_List);
 
 #### INSERT INTO
 
@@ -18,7 +18,7 @@
 
 > #### INSERT INTO table_name VALUES (Value_List);
 
-#### UPDATE (WHERE CLAUSE CAN BE APPLIED TO EITHER KEY OR NON-KEY ATTRIBUTES)
+#### UPDATE (where clause can be applied to either key or non-key attribute)
 
 > #### UPDATE table_name SET attr1=val1,attr2=val2,... (WHERE condition);
 
