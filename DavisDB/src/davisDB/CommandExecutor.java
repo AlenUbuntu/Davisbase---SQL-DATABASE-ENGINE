@@ -264,22 +264,22 @@ public class CommandExecutor {
 		
 			// insert column_default 
 			any = orb.create_any();
-			String tmp = Utilities.getDefault(dataTypes.get(colNames.get(i)));
-			if(tmp == null){
+			String tmp;
+			String cons_tmp = Utilities.checkANull(constraints.get(colNames.get(i)));
+			if (cons_tmp.equals("NO"))
+				tmp=" ";
+			else
 				tmp = "NULL";
+			
+			if(tmp.length()<"NULL".length()){
 				any.insert_string(Utilities.buildStrWithSize(tmp, "NULL".length()-tmp.length()));
 				typeCodes[4] = Utilities.TypeCode.TEXT.getTypeCode()+"NULL".length();
 			}
 			else{
-				if(tmp.length()<"NULL".length()){
-					any.insert_string(Utilities.buildStrWithSize(tmp, "NULL".length()-tmp.length()));
-					typeCodes[4] = Utilities.TypeCode.TEXT.getTypeCode()+"NULL".length();
-				}
-				else{
-					any.insert_string(tmp);
-					typeCodes[4] = Utilities.TypeCode.TEXT.getTypeCode()+tmp.length();
-				}
+				any.insert_string(tmp);
+				typeCodes[4] = Utilities.TypeCode.TEXT.getTypeCode()+tmp.length();
 			}
+			
 			values.put(idx++, any);
 			
 
