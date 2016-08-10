@@ -39,6 +39,8 @@
 > #### USE database_name;
 
 ##File Format:
+
+.tbl is the table file
 - databaseHeader:
 
 ![](https://github.com/AlenUbuntu/Davisbase---SQL-DATABASE-ENGINE/blob/master/file%20format%201.JPG)
