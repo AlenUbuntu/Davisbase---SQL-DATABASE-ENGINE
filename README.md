@@ -2,6 +2,12 @@
 
 ###A java-based SQL databse engine which support common SQL syntax (syntax checker embedded):
 
+#### Note: A password-based encryption module embedded. 
+####Default setting:
+
+##### Username: root
+##### Password: root
+
 #### CREATE DATABASE
 
 > #### CREATE DATABASE database_name;
@@ -149,3 +155,4 @@
 ![](https://github.com/AlenUbuntu/Davisbase---SQL-DATABASE-ENGINE/blob/master/show%205.gif)
 ![](https://github.com/AlenUbuntu/Davisbase---SQL-DATABASE-ENGINE/blob/master/show%207.JPG)
 ![](https://github.com/AlenUbuntu/Davisbase---SQL-DATABASE-ENGINE/blob/master/show%209.gif)
+
